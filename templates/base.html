@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}ShopMart — Todo lo que buscas, hoy{% endblock %}</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,600;0,700;1,600;1,700&family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+
+  <div class="topbar">
+    <div class="container">
+      <span>Envíos a todo el país · Devoluciones gratis en 30 días</span>
+      <span>
+        {% if session.get('user') %}
+          <a href="{{ url_for('index') }}">Hola, {{ session['user'] }}</a> ·
+          <a href="{{ url_for('logout') }}">Cerrar sesión</a>
+        {% else %}
+          <a href="{{ url_for('login') }}">Inicia sesión</a> ·
+          <a href="{{ url_for('register') }}">Crea tu cuenta</a>
+        {% endif %}
+      </span>
+    </div>
+  </div>
+
+  <nav class="navbar">
+    <div class="container">
+      <a href="{{ url_for('index') }}" class="brand">Shop<span>Mart</span></a>
+
+      <form class="search-form" action="{{ url_for('search') }}" method="get">
+        <input type="text" name="q" placeholder="Busca productos, marcas y más..." value="{{ request.args.get('q', '') }}">
+        <button type="submit" aria-label="Buscar">Buscar</button>
+      </form>
+
+      <div class="nav-actions">
+        <a href="{{ url_for('login') if not session.get('user') else url_for('index') }}" class="nav-link">
+          <small>{% if session.get('user') %}Bienvenido/a{% else %}Hola, identifícate{% endif %}</small>
+          <strong>{{ session.get('user', 'Mi cuenta') }}</strong>
+        </a>
+        <a href="{{ url_for('cart') }}" class="cart-pill">
+          🛒 Carrito
+          <span class="count">{{ cart_count }}</span>
+        </a>
+      </div>
+    </div>
+  </nav>
+
+  <div class="category-rail">
+    <div class="container">
+      {% set current_cat = request.args.get('cat', '') %}
+      <a class="chip {{ 'active' if current_cat == '' else '' }}" href="{{ url_for('index') }}">Todas</a>
+      {% for cat in categories %}
+        <a class="chip {{ 'active' if current_cat == cat else '' }}" href="{{ url_for('index', cat=cat) }}">{{ cat }}</a>
+      {% endfor %}
+    </div>
+  </div>
+
+  {% with messages = get_flashed_messages() %}
+    {% if messages %}
+      <div class="flash">{{ messages[0] }}</div>
+    {% endif %}
+  {% endwith %}
+
+  {% block content %}{% endblock %}
+
+  <footer>
+    <div class="container">
+      <div class="footer-grid">
+        <div>
+          <h4>ShopMart</h4>
+          <a href="#">Sobre nosotros</a>
+          <a href="#">Trabaja con nosotros</a>
+          <a href="#">Prensa</a>
+        </div>
+        <div>
+          <h4>Atención al cliente</h4>
+          <a href="#">Centro de ayuda</a>
+          <a href="#">Estado de mi pedido</a>
+          <a href="#">Devoluciones</a>
+        </div>
+        <div>
+          <h4>Vende con nosotros</h4>
+          <a href="#">Vende en ShopMart</a>
+          <a href="#">Programa de afiliados</a>
+          <a href="#">Publicidad</a>
+        </div>
+        <div>
+          <h4>Síguenos</h4>
+          <a href="#">Instagram</a>
+          <a href="#">Facebook</a>
+          <a href="#">X / Twitter</a>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span class="footer-brand">ShopMart</span>
+        <span>© 2026 ShopMart — entorno de laboratorio con fines educativos, no procesa pagos reales.</span>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>

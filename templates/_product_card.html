@@ -1,0 +1,19 @@
+<div class="product-card">
+  {% if p['badge'] %}
+    <span class="badge tag-shape {{ 'new' if p['badge'] == 'Nuevo' else '' }}">{{ p['badge'] }}</span>
+  {% endif %}
+  <a href="{{ url_for('product', product_id=p['id']) }}">
+    <div class="thumb" style="width:100%;height:140px;font-size:52px;">{{ p['icon'] }}</div>
+  </a>
+  <span class="cat-eyebrow">{{ p['category'] }}</span>
+  <h3><a href="{{ url_for('product', product_id=p['id']) }}">{{ p['name'] }}</a></h3>
+  <div class="rating">{{ '★' * (p['rating']|round|int) }}{{ '☆' * (5 - (p['rating']|round|int)) }} <span class="out-of">{{ p['rating'] }}</span></div>
+  <div class="price-row">
+    <span class="price">${{ '%.2f'|format(p['price']) }}</span>
+    {% if p['badge'] and p['badge'] != 'Nuevo' %}
+      <span class="price-strike">${{ '%.2f'|format(p['price'] * 1.2) }}</span>
+    {% endif %}
+  </div>
+  <span class="stock {{ 'low' if p['stock'] < 10 else '' }}">{{ 'Últimas ' + p['stock']|string + ' unidades' if p['stock'] < 10 else 'En stock' }}</span>
+  <a href="{{ url_for('product', product_id=p['id']) }}" class="btn btn-primary btn-block">Ver producto</a>
+</div>

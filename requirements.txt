@@ -1,0 +1,21 @@
+# Núcleo de la aplicación
+Flask==2.0.1
+Werkzeug==2.0.1
+Jinja2==3.0.1
+itsdangerous==2.0.1
+click==8.0.1
+
+# -----------------------------------------------------------------------
+# VULNERABILIDAD 4: Dependencia con CVE conocido (SCA / cadena de suministro)
+#
+# PyYAML 5.3.1 es vulnerable a CVE-2020-14343: yaml.load()/FullLoader
+# permite ejecución de código arbitrario al deserializar YAML no confiable
+# (corregido en PyYAML 5.4). Esta línea está fijada a propósito para que
+# una herramienta de Software Composition Analysis (Dependabot, pip-audit,
+# Safety, Snyk, Trivy, OWASP Dependency-Check) la reporte automáticamente
+# en el pipeline.
+#
+# Remediación: actualizar a PyYAML>=6.0 y, si se procesa YAML de fuentes no
+# confiables, usar siempre yaml.safe_load() en vez de yaml.load()/full_load().
+# -----------------------------------------------------------------------
+PyYAML==5.3.1

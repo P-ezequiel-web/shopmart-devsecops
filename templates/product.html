@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container">
+  {% if product %}
+  <div class="product-detail">
+    <div class="thumb lg">{{ product['icon'] }}</div>
+
+    <div class="product-info">
+      <span class="cat-eyebrow">{{ product['category'] }}</span>
+      <h1>{{ product['name'] }}</h1>
+      <div class="rating">{{ '★' * (product['rating']|round|int) }}{{ '☆' * (5 - (product['rating']|round|int)) }} <span class="out-of">{{ product['rating'] }} de 5</span></div>
+      <div class="price-row" style="margin-top:14px;">
+        <span class="price">${{ '%.2f'|format(product['price']) }}</span>
+      </div>
+      <p class="description">{{ product['description'] }}</p>
+
+      <div class="buy-box">
+        <p class="stock {{ 'low' if product['stock'] < 10 else '' }}" style="margin-top:0;">
+          {{ 'Últimas ' + product['stock']|string + ' unidades' if product['stock'] < 10 else 'En stock, listo para enviar' }}
+        </p>
+        <form action="{{ url_for('cart_add', product_id=product['id']) }}" method="post">
+          <button type="submit" class="btn btn-primary btn-block">Añadir al carrito</button>
+        </form>
+      </div>
+
+      <div class="reviews">
+        <h2 style="font-family: var(--font-display); font-size: 20px;">Opiniones de clientes ({{ reviews|length }})</h2>
+
+        {% for r in reviews %}
+          <div class="review">
+            <div class="author">{{ r['author'] }}</div>
+            <!--
+              VULNERABILIDAD: XSS almacenado (CWE-79).
+              `r['comment']` proviene directamente de un formulario público y
+              se renderiza con `|safe`, sin sanitizar ni escapar. Cualquier
+              visitante que abra esta página ejecutará el HTML/JS que haya
+              guardado un atacante en una reseña.
+            -->
+            <div class="body">{{ r['comment']|safe }}</div>
+          </div>
+        {% else %}
+          <p class="muted">Este producto todavía no tiene reseñas. ¡Sé el primero en opinar!</p>
+        {% endfor %}
+
+        <form class="review-form" action="{{ url_for('product', product_id=product['id']) }}" method="post">
+          <label for="author">Tu nombre</label>
+          <input type="text" id="author" name="author" placeholder="Ej. María G.">
+          <label for="comment">Tu opinión</label>
+          <textarea id="comment" name="comment" rows="3" placeholder="¿Qué te pareció el producto?"></textarea>
+          <button type="submit" class="btn btn-ghost">Publicar opinión</button>
+        </form>
+      </div>
+    </div>
+  </div>
+  {% else %}
+    <div class="empty-state">
+      <p>No encontramos este producto.</p>
+      <a href="{{ url_for('index') }}" class="btn btn-primary">Volver a la tienda</a>
+    </div>
+  {% endif %}
+</div>
+{% endblock %}

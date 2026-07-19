@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="auth-wrap">
+  <div class="auth-card">
+    <h1>Inicia sesión</h1>
+    <p class="sub">Accede a tus pedidos, listas y recomendaciones.</p>
+
+    {% if error %}<div class="form-error">{{ error }}</div>{% endif %}
+
+    <form method="post" action="{{ url_for('login') }}">
+      <div class="field">
+        <label for="username">Usuario</label>
+        <input type="text" id="username" name="username" required>
+      </div>
+      <div class="field">
+        <label for="password">Contraseña</label>
+        <input type="password" id="password" name="password" required>
+      </div>
+      <button type="submit" class="btn btn-primary btn-block">Entrar</button>
+    </form>
+
+    <p class="auth-foot">¿Aún no tienes cuenta? <a href="{{ url_for('register') }}">Regístrate</a></p>
+  </div>
+</div>
+{% endblock %}

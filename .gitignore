@@ -1,0 +1,7 @@
+venv/
+.venv/
+__pycache__/
+*.pyc
+shopmart.db
+.DS_Store
+*.log
