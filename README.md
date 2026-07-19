@@ -1,14 +1,13 @@
 # ShopMart — Laboratorio de Web App Security + SDLC
 
-Tienda online (estilo Amazon/eBay) construida con **Flask**, con cuatro
+Tienda online construida con **Flask**, con cuatro
 vulnerabilidades **deliberadas** para servir de objetivo a un pipeline
 DevSecOps (CI/CD con detección y remediación automática).
 
 > ⚠️ **Uso exclusivo en laboratorio.** No despliegues esta app en una red
-> pública, no reutilices este código en un proyecto real y no subas la
-> `shopmart.db` generada (ya está en `.gitignore`). El objetivo es que
-> herramientas de análisis (SAST/DAST/SCA/secret scanning) la detecten y,
-> en pasos posteriores de tu pipeline, la remedien automáticamente.
+> pública, no reutilices este código en un proyecto real.
+> El objetivo es que herramientas de análisis
+> (SAST/DAST/SCA/secret scanning) la detecten.
 
 ## Cómo correrlo localmente
 
@@ -132,7 +131,3 @@ confiable con `yaml.load()`/`FullLoader`, corregido en la 5.4).
 | DAST (dinámico, app corriendo) | Vulnerabilidades 1 y 2 en tiempo real | OWASP ZAP Baseline Scan |
 | Remediación automática | 3 y 4 sobre todo | Dependabot auto-PR, bot que reemplace `\|safe` / concatenación SQL vía PR sugerido |
 
-Con este mapa ya puedes definir los *jobs* de tu workflow de GitHub Actions
-(por ejemplo `bandit -r . -ll`, `semgrep --config auto`, `gitleaks detect`,
-`pip-audit -r requirements.txt`, y un job de ZAP Baseline apuntando a la app
-levantada en un contenedor efímero del propio workflow).
