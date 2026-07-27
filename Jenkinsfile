@@ -71,12 +71,12 @@ pipeline {
         // ─────────────────────────────────────────
         stage('SAST (SonarQube)') {
             steps {
-                withSonarQubeEnv('SonarQube') {
+                withSonarQubeEnv('sonar-ci') {
                     sh '''
                         sonar-scanner \
                           -Dsonar.projectKey=${SONAR_PROJECT_KEY} \
                           -Dsonar.sources=. \
-                          -Dsonar.host.url=http://localhost:9000
+                          -Dsonar.host.url=http://192.168.100.61:9000
                     '''
                 }
             }
