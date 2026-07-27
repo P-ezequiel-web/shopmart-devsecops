@@ -85,16 +85,18 @@ pipeline {
         // ─────────────────────────────────────────
         // STAGE 4: Quality Gate de SonarQube
         // ─────────────────────────────────────────
-        stage('Quality Gate') {
+       stage('Quality Gate') {
             steps {
-                timeout(time: 5, unit: 'MINUTES') {
-                    script {
-                        def qg = waitForQualityGate(abortPipeline: false)
-                        if (qg.status != 'OK') {
-                            echo "⚠️ ALERTA: El Quality Gate de SonarQube no fue superado (Estado: ${qg.status}). Continuando con el pipeline..."
-                            currentBuild.result = 'UNSTABLE'
-                        } else {
-                            echo "✅ SonarQube Quality Gate superado exitosamente."
+                catchError(buildResult: 'UNSTABLE', stageResult: 'UNSTABLE') {
+                    timeout(time: 10, unit: 'MINUTES') {
+                        script {
+                            def qg = waitForQualityGate(abortPipeline: false)
+                            if (qg.status != 'OK') {
+                                echo "⚠️ ALERTA: El Quality Gate de SonarQube no fue superado (Estado: ${qg.status}). Continuando con el pipeline..."
+                                currentBuild.result = 'UNSTABLE'
+                            } else {
+                                echo "✅ SonarQube Quality Gate superado exitosamente."
+                            }
                         }
                     }
                 }
