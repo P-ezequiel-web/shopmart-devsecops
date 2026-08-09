@@ -331,10 +331,4 @@ python app.py
 
 La app queda disponible en `http://127.0.0.1:5000`. La base de datos SQLite se crea y siembra automáticamente en el primer arranque.
 
----
 
-## 12. Posibles próximos pasos para la documentación del proyecto
-
-- Diagrama de despliegue si se planea contenerizar la app (Dockerfile) para el pipeline DevSecOps.
-- Documentar los *jobs* del pipeline CI/CD (ya hay una propuesta de etapas en el README de seguridad) como parte de un runbook aparte.
-- Si se agregan roles/permisos reales (uso efectivo de `is_admin`), documentar el modelo de autorización correspondiente.
